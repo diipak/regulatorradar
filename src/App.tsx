@@ -8,8 +8,11 @@ function Subscribe() {
 }
 
 function App() {
+  // Detect if we're running on GitHub Pages
+  const basename = window.location.hostname === 'diipak.github.io' ? '/regulatorradar' : '';
+  
   return (
-    <Router>
+    <Router basename={basename}>
       <Routes>
         <Route path="/" element={<Layout />}>
           <Route index element={<Dashboard />} />
