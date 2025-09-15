@@ -83,7 +83,7 @@ const Dashboard: React.FC = () => {
     }
   };
 
-  // Fallback to mock data if no real data available
+  // Enhanced demo data for impressive presentation
   const mockRegulations = [
     {
       id: '1',
@@ -93,44 +93,95 @@ const Dashboard: React.FC = () => {
       type: 'enforcement',
       date: '2024-12-15',
       penalty: 4300000000,
-      summary: 'The SEC has imposed a record $4.3 billion penalty on a major DeFi platform for offering unregistered securities. This action significantly impacts the crypto lending space.'
+      summary: 'The SEC has imposed a record $4.3 billion penalty on a major DeFi platform for offering unregistered securities. This action significantly impacts the crypto lending space and requires immediate compliance review.'
     },
     {
       id: '2', 
       title: 'AI Disclosure Requirements for Trading Systems',
       description: 'New rules requiring disclosure of AI systems in algorithmic trading',
-      severity: 6,
+      severity: 7,
       type: 'final-rule',
       date: '2024-12-10',
       penalty: null,
-      summary: 'Financial institutions must now disclose their use of AI systems in trading algorithms and provide transparency reports.'
+      summary: 'Financial institutions must now disclose their use of AI systems in trading algorithms and provide transparency reports. Implementation deadline: March 2025.'
     },
     {
       id: '3',
-      title: 'Enhanced Cybersecurity Standards',
+      title: 'Enhanced Cybersecurity Standards for Fintech',
       description: 'Proposed enhanced cybersecurity requirements for fintech companies',
-      severity: 4,
+      severity: 6,
       type: 'proposed-rule',
       date: '2024-12-08',
       penalty: null,
-      summary: 'New proposed rules would require enhanced cybersecurity measures and incident reporting for fintech companies.'
+      summary: 'New proposed rules would require enhanced cybersecurity measures and incident reporting for fintech companies. Comment period ends January 2025.'
+    },
+    {
+      id: '4',
+      title: 'Digital Asset Custody Rule Updates',
+      description: 'SEC updates custody requirements for digital asset investment advisers',
+      severity: 8,
+      type: 'final-rule',
+      date: '2024-12-05',
+      penalty: null,
+      summary: 'Investment advisers managing digital assets must comply with enhanced custody requirements. Affects crypto funds and digital asset managers.'
+    },
+    {
+      id: '5',
+      title: 'Payment Processing AML Enforcement',
+      description: 'FinCEN enforcement action against payment processor for AML violations',
+      severity: 7,
+      type: 'enforcement',
+      date: '2024-12-03',
+      penalty: 850000000,
+      summary: 'Major payment processor fined $850M for inadequate anti-money laundering controls. Highlights importance of robust AML compliance programs.'
+    },
+    {
+      id: '6',
+      title: 'Open Banking Security Standards',
+      description: 'Proposed security standards for open banking API implementations',
+      severity: 5,
+      type: 'proposed-rule',
+      date: '2024-12-01',
+      penalty: null,
+      summary: 'New security standards proposed for financial institutions implementing open banking APIs. Focus on data protection and consumer privacy.'
     }
   ];
 
   const [selectedRegulation, setSelectedRegulation] = useState<RegulationAnalysis | null>(null);
 
-  // Use real data if available, otherwise fall back to mock data
+  // Use real data if available, otherwise fall back to enhanced mock data
   const displayRegulations = regulations.length > 0 ? regulations : mockRegulations.map(mock => ({
     id: mock.id,
     title: mock.title,
     severityScore: mock.severity,
     regulationType: mock.type as 'enforcement' | 'final-rule' | 'proposed-rule',
-    businessImpactAreas: [],
+    businessImpactAreas: ['Operations', 'Legal', 'Technology'],
     estimatedPenalty: mock.penalty || 0,
-    implementationTimeline: 30,
+    implementationTimeline: mock.severity >= 8 ? 30 : mock.severity >= 6 ? 90 : 180,
     plainEnglishSummary: mock.summary,
-    actionItems: [],
-    originalUrl: '#',
+    actionItems: [
+      {
+        description: mock.severity >= 8 ? 'Immediate legal review required' : 'Review current compliance procedures',
+        priority: mock.severity >= 8 ? 'high' : mock.severity >= 6 ? 'medium' : 'low',
+        estimatedHours: mock.severity >= 8 ? 40 : 20,
+        category: 'legal',
+        deadline: new Date(Date.now() + (mock.severity >= 8 ? 7 : 30) * 24 * 60 * 60 * 1000)
+      },
+      {
+        description: mock.severity >= 7 ? 'Update policies and procedures' : 'Monitor for further developments',
+        priority: mock.severity >= 7 ? 'high' : 'medium',
+        estimatedHours: mock.severity >= 7 ? 24 : 8,
+        category: 'operational',
+        deadline: new Date(Date.now() + (mock.severity >= 7 ? 14 : 60) * 24 * 60 * 60 * 1000)
+      },
+      {
+        description: mock.severity >= 6 ? 'Assess technology compliance requirements' : 'Document for future reference',
+        priority: mock.severity >= 6 ? 'medium' : 'low',
+        estimatedHours: mock.severity >= 6 ? 16 : 4,
+        category: 'technical'
+      }
+    ],
+    originalUrl: `https://www.sec.gov/rules/regulation-${mock.id}`,
     processedDate: new Date(mock.date),
     notificationsSent: []
   }));
